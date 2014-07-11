@@ -4,6 +4,7 @@ import processing.video.Movie;
 String MOVIE_FILE = "video_file";
 String OUTPUT_DIR = "pos/";
 int SEEK_INTERVAL = 4;
+int FAST_SEEK_INTERVAL = 100;
 
 String OBJ_NAME = "object_name";
 
@@ -63,6 +64,10 @@ void keyPressed() {
     togglePlay();
   } else if (key == 's') {
     tracker.saveCsv();
+  } else if (key == 'q') {
+    movieFastBackward();
+  } else if (key == 'w') {
+    movieFastForward();
   }
 }
 
@@ -90,6 +95,16 @@ void movieBakcward() {
 void movieForward() {
   float now = movie.time();
   movie.jump(now + SEEK_INTERVAL);
+}
+
+void movieFastBackward() {
+  float now = movie.time();
+  movie.jump(now - FAST_SEEK_INTERVAL);
+}
+
+void movieFastForward() {
+  float now = movie.time();
+  movie.jump(now + FAST_SEEK_INTERVAL);
 }
 
 void speedUp() {
