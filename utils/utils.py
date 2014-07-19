@@ -53,7 +53,7 @@ def independent_one_sided_ttest_summary(a, b, **kwargs):
     p = p / 2  # from two-sided to one-sided t-test
     # standard error of means
     # http://en.wikipedia.org/wiki/Standard_error#Standard_error_of_the_mean
-    yerr = [np.std(array) / len(array) for array in (a, b)]
+    yerr = [np.std(array) / len(array) ** 0.5 for array in (a, b)]
     print('mean (a vs b): {}\t{}'.format(*means))
     print('std  (a vs b): {}\t{}'.format(*stds))
     print('t: {}\tp: {}'.format(t, p))
