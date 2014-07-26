@@ -66,6 +66,14 @@ def independent_one_sided_ttest_summary(a, b, **kwargs):
         getattr(plt, method)(value)
 
 
+def euclidean_distance(a, b):
+    array = np.array([a, b])
+    return sum((array[1] - array[0]) ** 2) ** 0.5
+
+
 # TESTS!
 # list_to_chunks
 assert list_to_chunks([1, 2, 3, 4], 2) == [[1, 2], [3, 4]]
+
+# euclidean_distance
+assert euclidean_distance([0, 3], [4, 0]) == 5
