@@ -9,12 +9,11 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
-GROUP_A = [4, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16]
-GROUP_B = [21, 22, 24, 25, 27, 28, 29, 30, 31, 34, 35, 36]
+from . import data
 
 
 def to_groups(l):
-    return l.loc[GROUP_A], l.loc[GROUP_B]
+    return l.loc[data.GROUP_A], l.loc[data.GROUP_B]
 
 
 def flatten(items, ignored_types=(str, bytes)):
@@ -51,13 +50,13 @@ def independent_one_sided_ttest_summary(a, b, **kwargs):
     stds = [np.std(array) for array in (a, b)]
     t, p = stats.ttest_ind(a, b, equal_var=False)
     p = p / 2  # from two-sided to one-sided t-test
-    # standard error of means
-    # http://en.wikipedia.org/wiki/Standard_error#Standard_error_of_the_mean
-    yerr = [np.std(array) / len(array) ** 0.5 for array in (a, b)]
     print('mean (a vs b): {}\t{}'.format(*means))
     print('std  (a vs b): {}\t{}'.format(*stds))
     print('t: {}\tp: {}'.format(t, p))
 
+    # standard error of means
+    # http://en.wikipedia.org/wiki/Standard_error#Standard_error_of_the_mean
+    yerr = [np.std(array) / len(array) ** 0.5 for array in (a, b)]
     plt.bar([0, 1], means, align='center', width=0.5, yerr=yerr,
         ecolor='black', capsize=10)
     plt.xticks([0, 1], ['Control', 'Interactive'])
@@ -69,6 +68,13 @@ def independent_one_sided_ttest_summary(a, b, **kwargs):
 def euclidean_distance(a, b):
     array = np.array([a, b])
     return sum((array[1] - array[0]) ** 2) ** 0.5
+
+
+def f_range(start, stop, step):
+    current = start
+    while current < stop:
+        yield current
+        current += step
 
 
 # TESTS!
