@@ -6,6 +6,7 @@ http://www.usabilitynet.org/trump/documents/Suschapt.doc
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy import stats
 
 from . import data
 
@@ -21,9 +22,6 @@ questions = [
     'I felt very confident using the system',
     'I needed to learn a lot of things before I could get going with this system',
 ]
-
-def numbered_questions():
-    return ['{}) {}'.format(i, q) for i, q in enumerate(questions, start=1)]
 
 
 def load_table():
@@ -67,7 +65,11 @@ def per_question_plot(a, b):
     ax.barh(ind, df.i, w, color='yellow', label='Interactive',
             xerr=df.i_err, ecolor='black')
 
-    ax.set(yticks=ind + w, yticklabels=numbered_questions(),
+    ts, ps = stats.ttest_ind(b, a)
+    ylabels = ['{}) {}\n        (t: {:.2f}, p: {:.2f})'.format(i, q, t, p)
+               for i, (q, t, p) in enumerate(zip(questions, ts, ps), start=1)]
+
+    ax.set(yticks=ind + w, yticklabels=ylabels,
            ylim=[2 * w - 1, len(df)], xlim=[1, 5])
     ax.yaxis.set_ticks_position('right')
     ax.yaxis.grid()
