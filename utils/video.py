@@ -72,15 +72,6 @@ def transform_vec(x, A, b):
     return np.dot(A, x) + b
 
 
-def participants_data(group):
-    group = group.upper()
-    d = data.groups[group]
-    # filter participants only
-    participants = data.get_participants(group)
-    return d[['participant{}{}'.format(n, axis) for axis in ['x', 'y']
-                                                for n in participants]]
-
-
 # TESTS!
 # append_one_and_stack
 assert np.all(append_one_and_stack([(1, 2), (3, 4)]) == \

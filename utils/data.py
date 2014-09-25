@@ -36,9 +36,28 @@ def video_metadata():
         return json.load(f)
 
 
+def participants_data(group):
+    group = group.upper()
+    d = groups[group]
+    # filter participants only
+    participants = get_participants(group)
+    return d[['participant{}{}'.format(n, axis) for n in participants
+                                                for axis in ['x', 'y']]]
+
+
+def beacons_data(group):
+    group = group.upper()
+    d = groups[group]
+    # filter beacons only
+    beacons = range(1, 7)
+    return d[['beacon{}{}'.format(n, axis) for n in beacons
+                                           for axis in ['x', 'y']]]
+
+
 def get_bench():
     '''Returns the bench singleton.'''
     return Bench.get()
+
 
 def create_bench(pos):
     '''Set the bench singleton.'''

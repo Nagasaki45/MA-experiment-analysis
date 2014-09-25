@@ -1,5 +1,4 @@
 from . import data
-from . import video
 from . import utils
 
 
@@ -26,7 +25,7 @@ def distance(block):
         end = block_metadata['end']
         duration = end - start
         # data, filtered by metadata
-        d = video.participants_data(name).loc[utils.f_range(start, end, 0.5)]
+        d = data.participants_data(name).loc[utils.f_range(start, end, 0.5)]
         # get diffs between rows, dropna (first row)
         diffed = d.diff().dropna()
         # columns napes from utils GROUP_A / GROUP_B
