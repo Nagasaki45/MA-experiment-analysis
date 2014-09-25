@@ -71,7 +71,8 @@ def f_range(start, stop, step):
         current += step
 
 
-def two_groups_three_bars(a_means, b_means, a_errs, b_errs, **kwargs):
+def two_groups_three_bars(a_means, b_means, a_errs=None, b_errs=None,
+                          **kwargs):
 
     pad = 0.1
     ind = np.arange(3) + pad
@@ -82,7 +83,8 @@ def two_groups_three_bars(a_means, b_means, a_errs, b_errs, **kwargs):
            yerr=a_errs, ecolor='black')
     ax.bar(ind + w, b_means, w, color='yellow', label='Interactive',
            yerr=b_errs, ecolor='black')
-    ax.set(xticks=ind + w, xticklabels=['Block {}'.format(x) for x in [1, 2, 3]])
+    ax.set(xticks=ind + w,
+           xticklabels=['Block {}'.format(x) for x in [1, 2, 3]])
     ax.set(**kwargs)
     ax.legend(loc='best')
 
