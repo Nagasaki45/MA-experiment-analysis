@@ -4,9 +4,6 @@ from . import utils, data
 
 NEAR = 1  # meter
 
-metadata = data.video_metadata()
-block_mod = {'A': 0, 'B': 4}
-
 dist = utils.euclidean_distance
 
 
@@ -31,13 +28,8 @@ def close_to_beacon(group, block, threshold=NEAR, exclude_bench=False):
         (np.ndarray): Shape is (timestamps, number_of_beacons).
     '''
 
-    block_metadata = metadata['block {}'.format(block + block_mod[group])]
-    start = block_metadata['start']
-    end = block_metadata['end']
-    frames = list(utils.f_range(start, end, 0.5))
-
-    participants = data.participants_data(group).loc[frames]
-    beacons = data.beacons_data(group).loc[frames]
+    participants = data.participants_data(group, block)
+    beacons = data.beacons_data(group, block)
 
     bench = data.get_bench()
 

@@ -9,12 +9,6 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
-from . import data
-
-
-def to_groups(l):
-    return l.loc[data.GROUP_A], l.loc[data.GROUP_B]
-
 
 def flatten(items, ignored_types=(str, bytes)):
     '''From the cookbook, p.135.'''
