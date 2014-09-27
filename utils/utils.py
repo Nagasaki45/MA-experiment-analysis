@@ -84,8 +84,9 @@ def two_groups_three_bars(a_means, b_means, a_errs=None, b_errs=None,
     ax.bar(ind + w, b_means, w, color='yellow', label='Interactive',
            yerr=b_errs, ecolor='black')
     ax.set(xticks=ind + w,
-           xticklabels=['Block {}'.format(x) for x in [1, 2, 3]])
-    ax.set(**kwargs)
+           xticklabels=['Block {}'.format(x) for x in [1, 2, 3]],
+           **kwargs)
+    ax.grid(axis='y')
     ax.legend(loc='best')
 
 
