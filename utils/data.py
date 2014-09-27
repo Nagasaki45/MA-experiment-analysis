@@ -14,6 +14,20 @@ GROUP_B = [21, 22, 24, 25, 27, 28, 29, 30, 31, 34, 35, 36]
 block_mod = {'A': 0, 'B': 4}  # converts blocks 4 - 7 of group B to 1 - 3
 
 
+# dataset for comparing my sus results.
+# Aaron Bangor, Philip T. Kortum & James T. Miller (2008)
+# An Empirical Evaluation of the System Usability Scale,
+# International Journal of Human-Computer Interaction, 24:6, 574-594
+sus_dataset = pd.DataFrame(
+    [[2324 , 206  ],
+     [70.14, 69.69],
+     [75.00, 70.91],
+     [21.71, 11.87]],
+    columns=['individual_surveys', 'multisurvey_studies'],
+    index=['count', 'mean', 'median', 'std'],
+)
+
+
 def to_groups(l):
     return l.loc[GROUP_A], l.loc[GROUP_B]
 
