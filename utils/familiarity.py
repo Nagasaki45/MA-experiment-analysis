@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 
-from . import data
+from . import data, utils
+
+FILL_NAN = 0.5
 
 
+@utils.memo
 def load_table(group):
     group = group.upper()
     participants = getattr(data, 'GROUP_{}'.format(group))
@@ -20,3 +23,19 @@ def show_map(mat):
     ticks = [range(len(mat.columns)), mat.columns]
     plt.xticks(*ticks)
     plt.yticks(*ticks)
+
+
+@utils.memo
+def p2p(from_p, to_p):
+    '''
+    Returns the familiarity value from participant "from_p"
+    to participant "to_p".
+    '''
+    for mat in [load_table('A'), load_table('B')]:
+        try:
+            return mat.loc[from_p, to_p]
+        except KeyError:
+            pass
+    raise KeyError(
+        "Can't find familiarity from {} to {}".format(from_p, to_p)
+    )

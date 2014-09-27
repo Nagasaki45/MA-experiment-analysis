@@ -36,23 +36,13 @@ def get_participants(group):
     return {'A': GROUP_A, 'B': GROUP_B}[group.upper()]
 
 
-def memo(f):
-    memory = []
-    @functools.wraps(f)
-    def wrapper():
-        if not memory:
-            memory.append(f())
-        return memory[0]
-    return wrapper
-
-
-@memo
+@utils.memo
 def csv_table():
     '''Returns the main survey data as pandas DataFrame.'''
     return pd.read_csv('raw_surveys_data.csv', index_col='id')
 
 
-@memo
+@utils.memo
 def video_metadata():
     metadata_path = os.path.join('raw_pos', 'METADATA.json')
     with open(metadata_path) as f:
