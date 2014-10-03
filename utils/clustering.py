@@ -4,7 +4,7 @@ import itertools
 from sklearn import cluster
 import numpy as np
 
-from . import data, utils, familiarity
+from . import data, utils, familiarity, beacons
 
 dist = utils.euclidean_distance
 
@@ -20,7 +20,7 @@ def participants_clustering(group, block=None, *args, **kwargs):
     Returns
     =======
     (clusters_centroids, clusters_partition):
-    clusters_centroids is a lsit of 2d point for each frame.
+    clusters_centroids is a list of 2d point for each frame.
     clusters_partition is a map of partitions (keys are cluster index
     and values are sets of participants_numbers) for each frame.
     '''
@@ -43,11 +43,77 @@ def participants_clustering(group, block=None, *args, **kwargs):
     return clusters_centroids, clusters_partition
 
 
-def beacons_clustering(group, block=None):
+def _bes_clustering_helper(bes, min_dist):
+    # for every beacon, check if there is another beacon close to it
+    for i, first in enumerate(bes):
+        for second in bes[i+1:]:
+            if dist(first, second) < min_dist:
+                # if two like this found, remove them, create the merge
+                # and call again
+                bes.remove(first)
+                bes.remove(second)
+                bes.append(tuple(np.mean([first, second], axis=0)))
+                return _bes_clustering_helper(bes, min_dist)
+    return bes
+
+
+def cluster_beacons_on_dance_floor(bes, min_dist=beacons.NEAR):
+    '''
+    Gets a list of beacons as 2d points and return centroids.
+    Beacons that near each other are merged.
+    '''
+
+    # remove duplications
+    as_tuples = (tuple(point) for point in bes)
+    unique = set(as_tuples)
+    bes = list(unique)
+
+    return _bes_clustering_helper(bes, min_dist)
+
+
+bes = [[0, 0], [0, 0]]
+assert np.allclose(cluster_beacons_on_dance_floor(bes, min_dist=1),
+                   [(0, 0)])
+
+bes = [[0, 0], [1, 1]]
+assert np.allclose(cluster_beacons_on_dance_floor(bes, min_dist=2),
+                   [(0.5, 0.5)])
+
+bes = [[0, 0], [1, 1], [3, 3]]
+assert np.allclose(cluster_beacons_on_dance_floor(bes, min_dist=2),
+                   [(3, 3), (0.5, 0.5)])
+
+
+def beacons_clustering(group, block=None, min_dist=beacons.NEAR):
     '''
     TODO.
     '''
-    pass
+
+    participants_data = data.participants_data(group, block)
+    beacons_data = data.beacons_data(group, block)
+    participants_nums = data.get_participants(group)
+    # a list of 2d point for each frame
+    clusters_centroids = []
+    # a map of partitions (keys are cluster index and values
+    # are sets of participants_numbers) for each frame
+    clusters_partition = []
+    zipped = zip(participants_data.iterrows(), beacons_data.iterrows())
+    filtered = ((pas, bes) for (_, pas), (_, bes) in zipped)
+    f = lambda x: np.array(utils.list_to_chunks(x.values, 2))
+    un_pandas = ((f(pas), f(bes)) for  pas, bes in filtered)
+    for pas, bes in list(un_pandas):
+        centroids = cluster_beacons_on_dance_floor(bes, min_dist)
+        clusters_centroids.append(centroids)
+        partition = collections.defaultdict(set)
+        for p_index, p_point in enumerate(pas):
+            p_num = participants_nums[p_index]
+            for i, c in enumerate(centroids):
+                if dist(p_point, c) < min_dist:
+                    partition[i].add(p_num)
+                    break  # participant belog to first centroid that match
+        clusters_partition.append(partition)
+
+    return clusters_centroids, clusters_partition
 
 
 def _algorithm_row_score(cents, maps, parts):
@@ -56,7 +122,9 @@ def _algorithm_row_score(cents, maps, parts):
         # per cluster, array of distances of each participant from centroid
         per_cluster_dists = [dist(parts[p], cents[key]) for p in parts_set]
         clusters_dists.append(np.mean(per_cluster_dists))
-    return np.mean(clusters_dists)
+    if clusters_dists:
+        return np.nanmean(clusters_dists)
+    return np.nan
 
 
 def _social_row_score(cents, maps, parts):
@@ -72,7 +140,9 @@ def _social_row_score(cents, maps, parts):
             val = val if not np.isnan(val) else familiarity.FILL_NAN
             per_cluster_sociability.append(val)
         social_scores.append(np.mean(per_cluster_sociability))
-    return np.mean(social_scores)
+    if social_scores:
+        return np.nanmean(social_scores)
+    return np.nan
 
 
 _row_scores = {'algorithm': _algorithm_row_score, 'social': _social_row_score}

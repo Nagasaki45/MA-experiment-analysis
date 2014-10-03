@@ -89,8 +89,8 @@ def two_groups_three_bars(data_dict, title=None, **kwargs):
     errs = defaultdict(list)
     for (group, block), vec in sorted(data_dict.items()):
         if isinstance(vec, Iterable):
-            mean = np.mean(vec)
-            err = np.std(vec) / np.sqrt(len(vec))
+            mean = np.nanmean(vec)
+            err = np.nanstd(vec) / np.sqrt(len(vec))
             print(full_template.format(group, block, mean, err))
         else:
             mean = vec
