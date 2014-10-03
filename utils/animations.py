@@ -58,7 +58,7 @@ def animate(group, block, length=None, offset=None):
         texts.append(plt.text(point[0], point[1], 'b{}'.format(beacon)))
     p_scat = plt.scatter([p[0] for p in p_points], [p[1] for p in p_points])
     b_scat = plt.scatter([p[0] for p in b_points], [p[1] for p in b_points],
-                         color='red', s=100, alpha=0.2)
+                         color='green', s=100, alpha=0.2)
     xlabel = plt.xlabel('')
     
     # modify plot properties
