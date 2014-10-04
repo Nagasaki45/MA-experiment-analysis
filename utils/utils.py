@@ -9,6 +9,8 @@ import pandas as pd
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
 
 
 def memo(f):
@@ -148,9 +150,53 @@ def two_groups_three_plots(data_dict, title=None, **kwargs):
         ax.grid(axis='y')
 
 
+def to_model_matrix(d, columns=None):
+    '''
+    Gets a dict of (group, block): vec and returns a pandas
+    model matrix.
+    '''
+    l = []
+    for (group, block), vec in sorted(d.items()):
+        for val in vec:
+            l.append((group, block, val))
+    return pd.DataFrame(l, columns=columns)
+
+
+def anova(d):
+    mat = to_model_matrix(d, columns=['group', 'block', 'score'])
+    linear_model = ols('score ~ C(group) + C(block) + C(group)*C(block)',
+                       data=mat).fit()
+    return sm.stats.anova_lm(linear_model)
+
+
 # TESTS!
 # list_to_chunks
 assert list_to_chunks([1, 2, 3, 4], 2) == [[1, 2], [3, 4]]
 
 # euclidean_distance
 assert euclidean_distance([0, 3], [4, 0]) == 5
+
+# to_model_matrix
+d = {
+    ('A', 1): [1, 2],
+    ('A', 2): [3, 4],
+    ('B', 1): [5, 6],
+    ('B', 2): [7, 8],
+}
+expected = pd.DataFrame([
+    ['A', 1, 1],
+    ['A', 1, 2],
+    ['A', 2, 3],
+    ['A', 2, 4],
+    ['B', 1, 5],
+    ['B', 1, 6],
+    ['B', 2, 7],
+    ['B', 2, 8],
+])
+from pandas.util.testing import assert_frame_equal
+assert_frame_equal(to_model_matrix(d), expected)
+
+# test with columns
+columns = ['group', 'block', 'value']
+expected.columns = columns
+assert_frame_equal(to_model_matrix(d, columns), expected)
