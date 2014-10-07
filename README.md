@@ -7,7 +7,9 @@ Experiment design - Just for reference...
 
 ## Analysis notebooks
 
-- [Main analysis notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/analyze.ipynb). Contains the video analysis and its derived movement / "sitting on the bench" / distance from beacons / clustering analysis.
+- [Video analysis notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/analyze.ipynb). Contains the movement, "sitting on the bench", distance from beacons, and clustering analysis.
+
+- In addition to the main video analysis notebook above, there are two extra notebooks dealing with video data. The first is the [video data mangling notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/video_data_mangling.ipynb), where the raw data passed some validations, affine transformation, clipping, etc.. The second is the [animations preview notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/animations.ipynb).
 
 - [System satisfaction survey (SUS based) analysis](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/usability.ipynb).
 
