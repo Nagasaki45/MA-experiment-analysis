@@ -169,6 +169,11 @@ def anova(d):
     return sm.stats.anova_lm(linear_model)
 
 
+def lines_to_floats(path):
+    with open(path) as f:
+        return [float(i.strip()) for i in f.readlines()]
+
+
 # TESTS!
 # list_to_chunks
 assert list_to_chunks([1, 2, 3, 4], 2) == [[1, 2], [3, 4]]

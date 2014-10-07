@@ -88,5 +88,10 @@ def beacons_data(group, block):
 @utils.memo
 def get_bench():
     path = os.path.join('cooked', 'video_bench_pos.csv')
-    with open(path) as f:
-        return [float(i.strip()) for i in f.readlines()]
+    return utils.lines_to_floats(path)
+
+
+@utils.memo
+def get_boundaries():
+    path = os.path.join('cooked', 'video_boundaries.csv')
+    return utils.lines_to_floats(path)

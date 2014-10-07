@@ -7,6 +7,8 @@ from . import data as d_module
 from . import utils
 from . import video
 
+BENCH_COLOR = 'r'
+
 
 def get_points(data, timestamp, num_of_participants):
     '''
@@ -38,14 +40,14 @@ def animate(group, block, length=None, offset=None):
     else:
         end = metadata['block {}'.format(block_num)]['end']
     frames = list(utils.f_range(start, end, 0.5))
-    data = d_module.groups[group].loc[frames]
+    data = d_module.video_data(group).loc[frames]
     
     # plot init
     fig = plt.figure(figsize=(5, 5))
 
     # add bench as circle to the plot
     bench = d_module.get_bench()
-    bench_area = plt.Circle(bench.pos, bench.RADIUS, color=bench.COLOR)
+    bench_area = plt.Circle(bench, video.BENCH_RADIUS, color=BENCH_COLOR)
     fig.gca().add_artist(bench_area)
 
     # animation init
@@ -63,7 +65,7 @@ def animate(group, block, length=None, offset=None):
     
     # modify plot properties
     plt.title('Group {} block {}'.format(group, block))
-    plt.axis([d_module.lower, d_module.upper] * 2)
+    plt.axis(d_module.get_boundaries() * 2)
     plt.gca().invert_yaxis()
     plt.legend([bench_area], ['bench area'])
 
