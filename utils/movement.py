@@ -14,18 +14,17 @@ def distance(block):
     Block should be 1, 2, 3. The block number for group B will adjust automatically.
     '''
     
-    groups = data.groups
+    groups = {'A': data.video_data('A'),
+              'B': data.video_data('B')}
     metadata = data.video_metadata()
     
     block_mod = {'A': 0, 'B': 4}
     results = []
     for name in sorted(groups):
         block_metadata = metadata['block {}'.format(block + block_mod[name])]
-        start = block_metadata['start']
-        end = block_metadata['end']
-        duration = end - start
+        duration = block_metadata['end'] - block_metadata['start']
         # data, filtered by metadata
-        d = data.participants_data(name).loc[utils.f_range(start, end, 0.5)]
+        d = data.participants_data(name, block)
         # get diffs between rows, dropna (first row)
         diffed = d.diff().dropna()
         # columns napes from utils GROUP_A / GROUP_B

@@ -9,6 +9,7 @@ from . import utils
 
 
 DATA_DIR = 'raw_pos'
+BENCH_RADIUS = 1
 
 
 def _load_tables(participants, beacons_group):

@@ -49,6 +49,7 @@ def video_metadata():
         return json.load(f)
 
 
+@utils.memo
 def _block_frames(group, block):
     block_string = 'block {}'.format(block + block_mod[group])
     block_metadata = video_metadata()[block_string]
@@ -57,68 +58,35 @@ def _block_frames(group, block):
     return list(utils.f_range(start, end, 0.5))
 
 
-def participants_data(group, block=None):
-    group = group.upper()
-    d = groups[group]
+@utils.memo
+def video_data(group):
+    low = group.lower()
+    path = os.path.join('cooked', 'video_group_{}.csv'.format(low))
+    return pd.read_csv(path, index_col='frame')
+
+
+@utils.memo
+def participants_data(group, block):
+    d = video_data(group)
     # filter participants only
     participants = get_participants(group)
     d = d[['participant{}{}'.format(n, axis) for n in participants
                                              for axis in ['x', 'y']]]
-    if block is None:
-        return d
     return d.loc[_block_frames(group, block)]
 
 
-def beacons_data(group, block=None):
-    group = group.upper()
-    d = groups[group]
+@utils.memo
+def beacons_data(group, block):
+    d = video_data(group)
     # filter beacons only
     beacons = range(1, 7)
     d = d[['beacon{}{}'.format(n, axis) for n in beacons
                                         for axis in ['x', 'y']]]
-    if block is None:
-        return d
     return d.loc[_block_frames(group, block)]
 
 
+@utils.memo
 def get_bench():
-    '''Returns the bench singleton.'''
-    return Bench.get()
-
-
-def create_bench(pos):
-    '''Set the bench singleton.'''
-    try:
-        return Bench(pos)
-    except SingletonError:
-        return get_bench()
-
-
-class SingletonError(RuntimeError):
-    pass
-
-
-class Bench:
-    COLOR = (1, 0, 0, 0.5)
-    RADIUS = 2  # meters
-    singleton = []
-
-    @classmethod
-    def get(cls):
-        if cls.singleton:
-            return cls.singleton[0]
-        return None
-
-    def __init__(self, pos):
-        if self.singleton:
-            raise SingletonError('Bench is a singleton')
-        self.pos = pos
-        self.singleton.append(self)
-
-
-# boundaries of the dance floor
-lower = None
-upper = None
-
-# groups video data
-groups = None
+    path = os.path.join('cooked', 'video_bench_pos.csv')
+    with open(path) as f:
+        return [float(i.strip()) for i in f.readlines()]
