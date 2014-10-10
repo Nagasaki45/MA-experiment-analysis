@@ -117,35 +117,33 @@ def beacons_clustering(group, block=None, min_dist=beacons.NEAR):
 
 
 def _algorithm_row_score(cents, maps, parts):
-    clusters_dists = []
+    clusters_dists = {}  # key is part num, val is dist
     for key, parts_set in maps.items():
-        # per cluster, array of distances of each participant from centroid
-        per_cluster_dists = [dist(parts[p], cents[key]) for p in parts_set]
-        clusters_dists.append(np.mean(per_cluster_dists))
-    if clusters_dists:
-        return np.nanmean(clusters_dists)
-    return np.nan
+        for p in parts_set:
+            clusters_dists[p] = dist(parts[p], cents[key])
+    return clusters_dists
 
 
 def _social_row_score(cents, maps, parts):
-    social_scores = []
+    social_scores = {}
     for _, parts_set in maps.items():
-        # no social score if cluster contains less then 2 participant
-        if len(parts_set) < 2:
-            continue
-        # list of familiarity values
-        per_cluster_sociability = []
-        for a, b in itertools.permutations(parts_set, 2):
-            val = familiarity.p2p(a, b)
-            val = val if not np.isnan(val) else familiarity.FILL_NAN
-            per_cluster_sociability.append(val)
-        social_scores.append(np.mean(per_cluster_sociability))
-    if social_scores:
-        return np.nanmean(social_scores)
-    return np.nan
+        for p in parts_set:
+            # list of social familiarities of participant p
+            p_socialities = []
+            for q in parts_set:
+                if p == q:
+                    continue
+                p_socialities.append(familiarity.p2p(p, q))
+            p_sociality = np.mean(p_socialities)
+            if not np.isnan(p_sociality):
+                social_scores[p] = p_sociality
+            else:
+                social_scores[p] = 0
+    return social_scores
 
 
-_row_scores = {'algorithm': _algorithm_row_score, 'social': _social_row_score}
+_row_scores = {'algorithm': _algorithm_row_score,
+               'social': _social_row_score}
 
 
 def score(kind, centroids, mapings, participants):
@@ -170,5 +168,17 @@ def score(kind, centroids, mapings, participants):
     f = _row_scores[kind]
     participants = utils.participants_as_list_of_dicts(participants)
     for row in zip(centroids, mapings, participants):
-        score.append(f(*row))
-    return score
+        as_dict = f(*row)
+        # add 0 as the score of participants that are not in the returned dict
+        parts = row[2]
+        for p in parts:
+            if p not in as_dict:
+                as_dict[p] = 0
+        score_vals = [val for key, val in sorted(as_dict.items())]
+        score.append(score_vals)
+    try:
+        return np.mean(score, axis=0)
+    except:
+        score = np.array(score)
+        print(score.shape, score[0])
+        raise
