@@ -1,4 +1,4 @@
-from . import data
+from . import data as data_module
 from . import utils
 
 
@@ -7,29 +7,20 @@ def point_distance(diffs):
     return (x_diff ** 2 + y_diff ** 2) ** 0.5
 
 
-def distance(block):
+def distance(group, block):
     '''
     Returns a DataFrame with the distance each participant passed during the block,
     divided by the length of the block in seconds.
-    Block should be 1, 2, 3. The block number for group B will adjust automatically.
     '''
-    
-    groups = {'A': data.video_data('A'),
-              'B': data.video_data('B')}
-    metadata = data.video_metadata()
-    
-    block_mod = {'A': 0, 'B': 4}
-    results = []
-    for name in sorted(groups):
-        block_metadata = metadata['block {}'.format(block + block_mod[name])]
-        duration = block_metadata['end'] - block_metadata['start']
-        # data, filtered by metadata
-        d = data.participants_data(name, block)
-        # get diffs between rows, dropna (first row)
-        diffed = d.diff().dropna()
-        # columns napes from utils GROUP_A / GROUP_B
-        columns = ['participant{}'.format(p) for p in data.get_participants(name)]
-        # apply the point_distance function to chunked data, send the new columns names
-        dist_values = diffed.apply(utils.divide_apply_unpack, axis=1, args=(point_distance, 2, (), columns))
-        results.append(dist_values.sum(axis=0) / duration)
-    return results
+
+    data = data_module.participants_data(group, block)
+    participants_nums = data_module.get_participants(group)
+    columns = ['participant{}'.format(p) for p in participants_nums]
+    block_duration = data_module.get_block_duration(group, block)
+    # get diffs between rows, dropna (first row)
+    diffed = data.diff().dropna()
+    # apply the point_distance function to chunked data
+    # send the new columns names
+    dist_values = diffed.apply(utils.divide_apply_unpack, axis=1,
+                               args=(point_distance, 2, (), columns))
+    return dist_values.sum(axis=0) / block_duration

@@ -95,3 +95,9 @@ def get_bench():
 def get_boundaries():
     path = os.path.join('cooked', 'video_boundaries.csv')
     return utils.lines_to_floats(path)
+
+
+def get_block_duration(group, block):
+    metadata = video_metadata()
+    block_metadata = metadata['block {}'.format(block + block_mod[group])]
+    return block_metadata['end'] - block_metadata['start']
