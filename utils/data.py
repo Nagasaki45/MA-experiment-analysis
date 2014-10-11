@@ -101,3 +101,9 @@ def get_block_duration(group, block):
     metadata = video_metadata()
     block_metadata = metadata['block {}'.format(block + block_mod[group])]
     return block_metadata['end'] - block_metadata['start']
+
+
+def save_to_cooked(d, csv_name):
+    mat = utils.to_model_matrix(d)
+    path = os.path.join('cooked', '{}.csv'.format(csv_name))
+    mat.to_csv(path, index=False, float_format='%0.4f')
