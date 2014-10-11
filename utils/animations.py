@@ -7,7 +7,7 @@ from . import data as d_module
 from . import utils
 from . import video
 
-BENCH_COLOR = 'r'
+BENCH_COLOR = (1, 0, 0, 0.5)
 
 
 def get_points(data, timestamp, num_of_participants):
