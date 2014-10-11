@@ -125,7 +125,7 @@ def _algorithm_row_score(cents, maps, parts):
 
 
 def _social_row_score(cents, maps, parts):
-    social_scores = {}
+    social_scores = {}  # key is part num, val is sociality in cluster
     for _, parts_set in maps.items():
         for p in parts_set:
             # list of social familiarities of participant p
@@ -133,12 +133,9 @@ def _social_row_score(cents, maps, parts):
             for q in parts_set:
                 if p == q:
                     continue
-                p_socialities.append(familiarity.p2p(p, q))
-            p_sociality = np.mean(p_socialities)
-            if not np.isnan(p_sociality):
-                social_scores[p] = p_sociality
-            else:
-                social_scores[p] = 0
+                p2q = familiarity.p2p(p, q)
+                p_socialities.append(p2q if not np.isnan(p2q) else 0)
+            social_scores[p] = np.mean(p_socialities)
     return social_scores
 
 
@@ -169,16 +166,12 @@ def score(kind, centroids, mapings, participants):
     participants = utils.participants_as_list_of_dicts(participants)
     for row in zip(centroids, mapings, participants):
         as_dict = f(*row)
-        # add 0 as the score of participants that are not in the returned dict
+        # add nan as the score of participants
+        # that are not in the returned dict
         parts = row[2]
         for p in parts:
             if p not in as_dict:
-                as_dict[p] = 0
+                as_dict[p] = np.nan
         score_vals = [val for key, val in sorted(as_dict.items())]
         score.append(score_vals)
-    try:
-        return np.mean(score, axis=0)
-    except:
-        score = np.array(score)
-        print(score.shape, score[0])
-        raise
+    return np.nanmean(score, axis=0)
