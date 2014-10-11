@@ -59,7 +59,7 @@ def per_question_plot(a, b):
     ind = np.arange(len(df))
     w = 0.4
 
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(5, 10))
     ax.barh(ind + w, df.c, w, color='blue', label='Control',
             xerr=df.c_err, ecolor='black')
     ax.barh(ind, df.i, w, color='yellow', label='Interactive',
@@ -72,6 +72,8 @@ def per_question_plot(a, b):
     ax.set(yticks=ind + w, yticklabels=ylabels,
            ylim=[2 * w - 1, len(df)], xlim=[1, 5])
     ax.yaxis.set_ticks_position('right')
+    for label in ax.get_yticklabels():
+        label.set_fontsize(15)
     ax.yaxis.grid()
     ax.legend()
 
