@@ -54,17 +54,16 @@ def independent_one_sided_ttest_summary(a, b, **kwargs):
     # more info regarding conversion to one-sided here:
     # http://stackoverflow.com/a/15984310/1224456
     means = [np.mean(array) for array in (a, b)]
-    stds = [np.std(array) for array in (a, b)]
-    t, p = stats.ttest_ind(a, b, equal_var=False)
-    p = p / 2  # from two-sided to one-sided t-test
-    print('mean (a vs b): {}\t{}'.format(*means))
-    print('std  (a vs b): {}\t{}'.format(*stds))
-    print('t: {}\tp: {}'.format(t, p))
-
     # standard error of means
     # http://en.wikipedia.org/wiki/Standard_error#Standard_error_of_the_mean
-    yerr = [np.std(array) / len(array) ** 0.5 for array in (a, b)]
-    plt.bar([0, 1], means, align='center', width=0.5, yerr=yerr,
+    stderrs = [np.std(array) / np.sqrt(len(array)) for array in (a, b)]
+    t, p = stats.ttest_ind(a, b, equal_var=False)
+    p = p / 2  # from two-sided to one-sided t-test
+    print('mean (a vs b): {:.3f}\t{:.3f}'.format(*means))
+    print('stderr  (a vs b): {:.3f}\t{:.3f}'.format(*stderrs))
+    print('t: {}\tp: {}\tdf: {}'.format(t, p, len(a) + len(b) - 2))
+
+    plt.bar([0, 1], means, align='center', width=0.5, yerr=stderrs,
         ecolor='black', capsize=10)
     plt.xticks([0, 1], ['Control', 'Interactive'])
     plt.xlim((-0.5, 1.5))
