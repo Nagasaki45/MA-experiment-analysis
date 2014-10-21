@@ -17,6 +17,12 @@ Experiment design - Just for reference...
 
 - [Participants familiarity analysis](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/familiarity.ipynb). Originally, tried to cluster the participants into socially cohisive subgroups. It seems that such clustering can not be achived...
 
+## Analysis notes
+
+- [Good SPSS two way repeated measure anova instructions](http://www.ucdenver.edu/academics/colleges/nursing/Documents/PDF/RepeatedMeasuresANOVA.pdf).
+
+- The `scripts` dir is the place to put external scripts to the analysis notebooks. For SPSS interaction / data transformation for example.
+
 ## More info
 
 - Information about the experiment, analysis methods and more could be find in my [research proposal](https://db.tt/4h5u179a).
