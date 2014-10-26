@@ -1,5 +1,3 @@
-import concurrent.futures
-
 from matplotlib import animation
 import matplotlib.pyplot as plt
 
@@ -60,11 +58,15 @@ def animate(group, block, length=None, offset=None):
         texts.append(plt.text(point[0], point[1], 'b{}'.format(beacon)))
     p_scat = plt.scatter([p[0] for p in p_points], [p[1] for p in p_points])
     b_scat = plt.scatter([p[0] for p in b_points], [p[1] for p in b_points],
-                         color='green', s=100, alpha=0.2)
+                         color='green', s=300, alpha=0.2)
     xlabel = plt.xlabel('')
     
     # modify plot properties
-    plt.title('Group {} block {}'.format(group, block))
+    letter_to_name = {
+        'A': 'Control',
+        'B': 'Interactive',
+    }
+    plt.title('{} group session {}'.format(letter_to_name[group], block))
     plt.axis(d_module.get_boundaries() * 2)
     plt.gca().invert_yaxis()
     plt.legend([bench_area], ['bench area'])

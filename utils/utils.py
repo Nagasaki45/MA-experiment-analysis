@@ -27,7 +27,8 @@ def flatten(items, ignored_types=(str, bytes)):
     '''From the cookbook, p.135.'''
     for x in items:
         if isinstance(x, Iterable) and not isinstance(x, ignored_types):
-            yield from flatten(x, ignored_types)
+            for inner in flatten(x, ignored_types):
+                yield inner
         else:
             yield x
 
