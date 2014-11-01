@@ -174,6 +174,24 @@ def lines_to_floats(path):
         return [float(i.strip()) for i in f.readlines()]
 
 
+def letter_to_name(x):
+    x = x.upper()
+    return {'A': 'Control group', 'B': 'Interactive group'}[x]
+
+
+def boundaries_indices(array):
+    '''
+    For an array of repeated values, find in which indices the values changes.
+    '''
+    indices = []
+    x0 = array[0]
+    for i, x in enumerate(array[1:], start=1):
+        if x != x0:
+            indices.append(i)
+        x0 = x
+    return indices
+
+
 # TESTS!
 # list_to_chunks
 assert list_to_chunks([1, 2, 3, 4], 2) == [[1, 2], [3, 4]]
@@ -205,3 +223,7 @@ assert_frame_equal(to_model_matrix(d), expected)
 columns = ['group', 'block', 'value']
 expected.columns = columns
 assert_frame_equal(to_model_matrix(d, columns), expected)
+
+# test boundaries_indices
+array = [0, 0, 0, 1, 2, 2, 3]
+assert boundaries_indices(array) == [3, 4, 6]

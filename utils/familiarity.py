@@ -18,12 +18,22 @@ def load_table(group):
     return mat
 
 
-def show_map(mat):
+def show_map(mat, labels=None):
     plt.imshow(mat, cmap='hot', interpolation='none', vmin=0, vmax=1)
     ticks = [range(len(mat.columns)), mat.columns]
     plt.xticks(*ticks)
     plt.yticks(*ticks)
+    if labels:
+        plot_clusters_boundaries(labels)
 
+
+def plot_clusters_boundaries(labels):
+    boundaries = utils.boundaries_indices(labels)
+    for b in boundaries:
+        # along the x axis
+        plt.plot([-0.5, len(labels) - 0.5], [b - 0.5, b - 0.5], 'b', lw=3)
+        # along the y axis
+        plt.plot([b - 0.5, b - 0.5], [-0.5, len(labels) - 0.5], 'b', lw=3)
 
 @utils.memo
 def p2p(from_p, to_p):
