@@ -9,13 +9,15 @@ Experiment design - Just for reference...
 
 - [Video analysis notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/analyze.ipynb). Contains the movement, "sitting on the bench", distance from beacons, and clustering analysis.
 
-- In addition to the main video analysis notebook above, there are two extra notebooks dealing with video data. The first is the [video data mangling notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/video_data_mangling.ipynb), where the raw data passed some validations, affine transformation, clipping, etc.. The second is the [animations preview notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/animations.ipynb).
+- In addition to the main video analysis notebook above, there are two extra notebooks dealing with video data. The first is the [video data mangling notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/video_data_mangling.ipynb), where the raw data passed some validations, affine transformation, clipping, etc.. The second is the [animations preview notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/animations.ipynb). All of the animations can also be found [at my blog](http://tomgurion.blogspot.co.il/2014/10/participants-movement-tracking-videos.html).
 
 - [System satisfaction survey (SUS based) analysis](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/usability.ipynb).
 
 - [Social interaction survey analysis](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/interaction_surveys.ipynb). WIP, 2-way repeated measure anova is needed.
 
 - [Participants familiarity analysis](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/familiarity.ipynb). Originally, tried to cluster the participants into socially cohisive subgroups. It seems that such clustering can not be achived...
+
+- [The annotations notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/annotations.ipynb) summeries some interesting moments from the experiment by annotating them almost manually.
 
 ## Analysis notes
 
