@@ -113,7 +113,7 @@ def two_groups_three_bars(data_dict, title=None, **kwargs):
     ax.bar(ind + w, means['B'], w, color='yellow', label='Interactive',
            yerr=errs['B'], ecolor='black')
     ax.set(xticks=ind + w,
-           xticklabels=['Block {}'.format(x) for x in [1, 2, 3]],
+           xticklabels=['Session {}'.format(x) for x in [1, 2, 3]],
            **kwargs)
     ax.grid(axis='y')
     ax.legend(loc='best')
@@ -145,7 +145,7 @@ def two_groups_three_plots(data_dict, title=None, **kwargs):
     for i, ((group, block), vec) in enumeration:
         ax = plt.subplot(2, 3, i)
         ax.plot(vec)
-        ax.set(title='Group {} block {}'.format(group, block),
+        ax.set(title='Group {} session {}'.format(group, block),
                **kwargs)
         ax.grid(axis='y')
 
