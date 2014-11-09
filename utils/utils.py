@@ -105,9 +105,9 @@ def two_groups_three_bars(data_dict, title=None, **kwargs):
     ind = np.arange(3) + pad
     w = (1 - 2 * pad) / 2
 
-    fig, ax = plt.subplots()
+    ax = plt.gca()
     if title:
-        fig.suptitle(title)
+        ax.set_title(title)
     ax.bar(ind, means['A'], w, color='blue', label='Control',
            yerr=errs['A'], ecolor='black')
     ax.bar(ind + w, means['B'], w, color='yellow', label='Interactive',
