@@ -45,6 +45,21 @@ def item_contribution(index, value):
     return 5 - value
 
 
+def break_lines(s, max_letters=60, indent=6):
+    if len(s) < max_letters:
+        return s
+    next_space_index = s.find(' ', max_letters)
+    if next_space_index > 0:
+        new_string = '{}\n{}{}'.format(
+            s[:next_space_index],
+            ' ' * indent,
+            break_lines(s[next_space_index + 1:]),
+        )
+    else:
+        new_string = s
+    return new_string
+
+
 def per_question_plot(a, b):
     '''
     10 questions, ttest for each of them.
@@ -59,21 +74,22 @@ def per_question_plot(a, b):
     ind = np.arange(len(df))
     w = 0.4
 
-    fig, ax = plt.subplots(figsize=(5, 10))
+    fig = plt.figure(figsize=(12, 10))
+    ax = fig.add_axes([0.05, 0.05, 0.35, 0.9])
     ax.barh(ind + w, df.c, w, color='blue', label='Control',
             xerr=df.c_err, ecolor='black')
     ax.barh(ind, df.i, w, color='yellow', label='Interactive',
             xerr=df.i_err, ecolor='black')
 
     ts, ps = stats.ttest_ind(b, a)
-    ylabels = ['{}) {}\n        (t: {:.2f}, p: {:.2f})'.format(i, q, t, p)
+    ylabels = ['{}) {}\n        (t: {:.2f}, p: {:.2f})'.format(i, break_lines(q), t, p)
                for i, (q, t, p) in enumerate(zip(questions, ts, ps), start=1)]
 
     ax.set(yticks=ind + w, yticklabels=ylabels,
            ylim=[2 * w - 1, len(df)], xlim=[1, 5])
     ax.yaxis.set_ticks_position('right')
     for label in ax.get_yticklabels():
-        label.set_fontsize(15)
+        label.set_fontsize(13)
     ax.yaxis.grid()
     ax.legend()
 

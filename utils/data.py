@@ -5,6 +5,7 @@ import os
 import json
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from . import utils
 
@@ -107,3 +108,10 @@ def save_to_cooked(d, csv_name):
     mat = utils.to_model_matrix(d)
     path = os.path.join('cooked', '{}.csv'.format(csv_name))
     mat.to_csv(path, index=False, float_format='%0.4f')
+
+
+def save_to_graphics(filename):
+    fig = plt.gcf()
+    full_filename = os.path.join('graphics', filename)
+    fig.savefig(full_filename + '.svg')
+    fig.savefig(full_filename + '.pdf')
