@@ -113,5 +113,5 @@ def save_to_cooked(d, csv_name):
 def save_to_graphics(filename):
     fig = plt.gcf()
     full_filename = os.path.join('graphics', filename)
-    fig.savefig(full_filename + '.svg')
-    fig.savefig(full_filename + '.pdf')
+    fig.savefig(full_filename + '.svg', bbox_inches='tight')
+    fig.savefig(full_filename + '.pdf', bbox_inches='tight')

@@ -74,8 +74,8 @@ def per_question_plot(a, b):
     ind = np.arange(len(df))
     w = 0.4
 
-    fig = plt.figure(figsize=(12, 10))
-    ax = fig.add_axes([0.05, 0.05, 0.35, 0.9])
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_axes([0.05, 0.05, 0.4, 0.9])
     ax.barh(ind + w, df.c, w, color='blue', label='Control',
             xerr=df.c_err, ecolor='black')
     ax.barh(ind, df.i, w, color='yellow', label='Interactive',
