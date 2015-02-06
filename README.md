@@ -17,6 +17,8 @@ Experiment design - Just for reference...
 
 - [Participants familiarity analysis](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/familiarity.ipynb). Originally, tried to cluster the participants into socially cohisive subgroups. It seems that such clustering can not be achived...
 
+- [Participants background stats](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/participants.ipynb).
+
 - [The annotations notebook](http://nbviewer.ipython.org/github/Nagasaki45/MA-experiment-analysis/blob/master/annotations.ipynb) summeries some interesting moments from the experiment by annotating them almost manually.
 
 ## Analysis notes
